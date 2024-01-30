@@ -42,6 +42,7 @@ class OrderTransformer
             ],
             'receiver' => [
                 'name1' => $order->get_shipping_first_name() . ' ' . $order->get_shipping_last_name(),
+                'name2' => $order->get_shipping_company(),
                 'street' => $order->get_shipping_address_1() . $order->get_shipping_address_2(),
                 'email' => $order->get_billing_email(),
                 'phoneNumber' => $order->get_billing_phone(),
@@ -90,6 +91,8 @@ class OrderTransformer
 
         if(!$totalWeight) {
             $totalWeight = (int)Option::defaultProductWeight() * 100;
+        } else {
+            $totalWeight = $this->convertWeightToDpdWeight($totalWeight);
         }
 
         for ($x = 1; $x <= $parcelCount; $x++) {
@@ -124,6 +127,27 @@ class OrderTransformer
         return $shipment;
     }
 
+    private function convertWeightToDpdWeight($weight)
+    {
+        $weightUnit = get_option('woocommerce_weight_unit');
+        switch($weightUnit) {
+            case 'kg':
+                return $weight * 100;
+                break;
+            case 'g':
+                return $weight / 10;
+                break;
+            case 'lbs':
+                return $weight * 45.359237;
+                break;
+            case 'oz':
+                return $weight * 2.834952313;
+                break;
+            default:
+                return $weight;
+        }
+    }
+
     private function addCustomsToShipment($shipment, $order, $orderItems)
     {
         $shipment['customs'] = [
@@ -148,7 +172,7 @@ class OrderTransformer
             $amount = $orderItem->get_total();
             $totalAmount += $amount;
             $customsLines[] = [
-                'description' => substr($product->get_name(), 0, 35),
+                'description' => mb_substr($product->get_name(), 0, 35, 'utf-8'),
                 'harmonizedSystemCode' => $hsCode,
                 'originCountry' => $originCountry,
                 'quantity' => (int) $orderItem->get_quantity(),

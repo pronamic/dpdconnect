@@ -36,8 +36,8 @@
                                     </p>
                                 <?php } else { ?>
 								<p>
-                                    <?=$data['shipment']['receiver']['street']; ?><br/>
-                                    <?=$data['shipment']['receiver']['postalcode']; ?> <?=$data['shipment']['receiver']['city']; ?>
+                                    <?= $data['shipment']['receiver']['street']; ?><br/>
+                                    <?= isset($data['shipment']['receiver']['postalCode']) ? $data['shipment']['receiver']['postalCode'] : $data['shipment']['receiver']['postalcode'] ?> <?=$data['shipment']['receiver']['city']; ?>
 								</p>
                                 <?php } ?>
 							</td>
@@ -70,7 +70,7 @@
 								</p>
 <?php foreach($data['parcelNumbers'] as $parcelNumber) { ?>
 								<p>
-									<a href="https://tracking.dpd.de/status/en_US/parcel/<?=$parcelNumber; ?>" style=" display:inline-block; text-decoration:none; width:140px; height:48px; color:#fff; background-color: #EF0326; text-align: center; line-height: 48px; font-weight: bold;"><?=__("Volg pakket",'dpdconnect');?></a>
+									<a href="https://www.dpdgroup.com/nl/mydpd/my-parcels/track?lang=en&parcelNumber=<?=$parcelNumber; ?>" style=" display:inline-block; text-decoration:none; width:140px; height:48px; color:#fff; background-color: #EF0326; text-align: center; line-height: 48px; font-weight: bold;"><?=__("Volg pakket",'dpdconnect');?></a>
 								</p>
 <?php } ?>
 							</td>

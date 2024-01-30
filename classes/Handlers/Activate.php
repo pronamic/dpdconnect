@@ -7,7 +7,7 @@ class Activate
     public static function handle()
     {
         register_activation_hook(dirname(__DIR__) . '/dpdconnect.php', 'dpdconnect_activate');
-        self::updateDb();
+//        self::updateDb();
     }
 
     public static function updateDb()
